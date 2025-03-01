@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Impresión de Stickers</title>
+    <style>
+        @page {
+            size: 55mm 44mm;
+            margin: 0;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .sticker {
+            width: 55mm;
+            height: 44mm;
+            display: inline-block;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2mm;
+            box-sizing: border-box;
+            text-align: center;
+            border: 1px solid transparent;
+            page-break-inside: avoid;
+        }
+        .header {
+            display: flex;
+            width: 100%;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            max-width: 50%;
+            max-height: 20mm;
+            height: auto;
+        }
+        .qr {
+            max-width: 20%;
+            max-height: 15mm;
+            height: auto;
+        }
+        .fecha {
+            font-size: 8px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 1mm;
+        }
+        .barcode {
+            width: 100%;
+            max-height: 15mm;
+            object-fit: contain;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        function getParameterByName(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        function generarStickers(cantidad, fecha, codigo) {
+            const container = document.body;
+            container.innerHTML = ''; // Limpiar contenido previo
+
+            cantidad = Math.max(1, parseInt(cantidad) || 1); // Mínimo 1
+
+            for (let i = 0; i < cantidad; i++) {
+                const sticker = document.createElement('div');
+                sticker.className = 'sticker';
+
+                const header = document.createElement('div');
+                header.className = 'header';
+
+                const logo = document.createElement('img');
+                logo.src = 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh4ii7isNGRgmsXAxBADkuEbFzepIneKm7EMU0kZ5hH2D7F2gP-gI47ijf09ALmjXBkoVY07CLpULuHkRpO0AnFJsJKa8lMTdieZnqPpLCminP_6t0IVBLqgei7JYrn7Hm54aNlrJU5rWHXSv-yrwb0gP09qg01knpHyWakun51soJB6Lg-LLLO4D8rs_U1/s536/logo2opi.png';
+                logo.className = 'logo';
+
+                const qr = document.createElement('img');
+                qr.src = 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhvkA446geY5XzmHM3B9IzYcnkfExxglwC3wWMC-sX5UO2Sys3aH-cKvAsGGQjgM8TGEMzo_x9Anjt7jNnDLHgEQDAVGTGpolhAtG8c1aVF4z6Fg24n3FGX5YhMdUCp0GOYQTGLfvYcFz7O0px9rWLN15ScmfeJJMpTtsyvaooKtYC0bWVWlg909w839b36/s100/barcode.gif';
+                qr.className = 'qr';
+
+                const fechaElem = document.createElement('div');
+                fechaElem.className = 'fecha';
+                fechaElem.textContent = fecha;
+
+                const barcode = document.createElement('img');
+                barcode.className = 'barcode';
+                barcode.src = `https://barcode.tec-it.com/barcode.ashx?data=${encodeURIComponent(codigo)}&code=Code128&translate-esc=on&color=000000`;
+
+                header.appendChild(logo);
+                header.appendChild(qr);
+
+                sticker.appendChild(header);
+                sticker.appendChild(fechaElem);
+                sticker.appendChild(barcode);
+                container.appendChild(sticker);
+            }
+
+            setTimeout(() => {
+                window.print();
+            }, 500);
+        }
+
+        const cantidad = prompt("¿Cuántos stickers deseas imprimir?");
+        const fecha = getParameterByName("fecha") || "DD/MM";
+        const codigo = getParameterByName("codigo") || "DEFAULT123";
+        generarStickers(cantidad, fecha, codigo);
+    </script>
+</body>
+</html>
+
+
