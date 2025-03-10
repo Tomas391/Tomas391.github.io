@@ -6,55 +6,71 @@
     <title>Impresión de Stickers</title>
     <style>
         @page {
-            size: 55mm 44mm;
-            margin: 0;
+            size: auto; /* Ajusta el tamaño según el contenido */
+            margin: 0; /* Sin márgenes */
         }
-        body {
+
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
+            align-items: flex-start;
+            padding: 5mm;
         }
+
         .sticker {
             width: 55mm;
             height: 44mm;
             display: inline-block;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
+            text-align: center;
             padding: 2mm;
             box-sizing: border-box;
-            text-align: center;
-            border: 1px solid transparent;
-            page-break-inside: avoid;
+            border: 1px solid transparent; /* Solo para ver bordes en pruebas */
         }
+
         .header {
             display: flex;
-            width: 100%;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
+            gap: 5mm;
         }
+
         .logo {
-            max-width: 50%;
+            max-width: 40%;
             max-height: 20mm;
-            height: auto;
         }
+
         .qr {
-            max-width: 20%;
-            max-height: 15mm;
-            height: auto;
+            max-width: 30%;
+            max-height: 20mm;
         }
+
         .fecha {
-            font-size: 8px;
+            font-size: 9px;
             font-weight: bold;
-            text-align: center;
-            margin-bottom: 1mm;
+            margin-bottom: 2mm;
         }
+
         .barcode {
             width: 100%;
             max-height: 15mm;
             object-fit: contain;
+        }
+
+        @media print {
+            body {
+                padding: 0;
+            }
+
+            .sticker {
+                page-break-after: avoid; /* Evita cortes de página */
+            }
         }
     </style>
 </head>
@@ -69,7 +85,7 @@
             const container = document.body;
             container.innerHTML = ''; // Limpiar contenido previo
 
-            cantidad = Math.max(1, parseInt(cantidad) || 1); // Mínimo 1
+            cantidad = Math.max(1, parseInt(cantidad) || 1); // Mínimo 1 etiqueta
 
             for (let i = 0; i < cantidad; i++) {
                 const sticker = document.createElement('div');
